@@ -1,12 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import joblib
+import json
 
 app = FastAPI(title="ShasyaSetu AI Engine")
 
 ai_model = joblib.load('market_ai_model.pkl')
 crop_encoder = joblib.load('crop_encoder.pkl')
 mandi_encoder = joblib.load('mandi_encoder.pkl')
+
+with open("model_stats.json", "r") as f:
+    stats = json.load(f)
+model_accuracy = stats["global_accuracy"]
 
 class CropRequest(BaseModel):
     crop_name: str
@@ -45,6 +50,7 @@ async def get_recommendation(request: CropRequest):
             "message": f"💡 Prediction: ₹{predicted_price}/kg. HOLD to earn ₹{extra_profit} extra net profit.",
             "confidence": confidence,
             "market_volatility": round(std_dev, 2),
+            "model_accuracy": f"{model_accuracy}%",
             "current_net": current_net,
             "future_net": round(future_net, 2)
         }
@@ -54,6 +60,7 @@ async def get_recommendation(request: CropRequest):
             "message": f"💡 Prediction: ₹{predicted_price}/kg. SELL NOW to avoid losses.",
             "confidence": confidence,
             "market_volatility": round(std_dev, 2),
+            "model_accuracy": f"{model_accuracy}%",
             "current_net": current_net,
             "future_net": round(future_net, 2)
         }

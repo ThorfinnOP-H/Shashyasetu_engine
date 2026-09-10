@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://shasyasetu-frontend.onrender.com/docs"], 
+    allow_origins=["https://shasyasetu-frontend.onrender.com"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

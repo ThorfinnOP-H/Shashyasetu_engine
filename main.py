@@ -5,6 +5,15 @@ import json
 from pathlib import Path
 
 app = FastAPI(title="ShasyaSetu AI Engine")
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://shasyasetu-frontend.onrender.com/docs"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE_DIR = Path(__file__).resolve().parent
 
